@@ -16,6 +16,7 @@ public class ListCommand implements Command {
         return "ls";
     }
 
+    //TODO make to return String
     private void ls(List<String> arguments, Pointer pointer) {
         if (arguments != null) {
             return;
