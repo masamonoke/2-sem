@@ -6,9 +6,15 @@ import java.util.List;
 
 public class ListCommand implements Command {
 
+    Printable printable;
+
+    public ListCommand(Printable printable) {
+        this.printable = printable;
+    }
+
     @Override
     public void execute(CommandInput input) {
-        ls(input.getParams(), input.getPointer());
+        printable.print(ls(input.getParams(), input.getPointer()));
     }
 
     @Override
@@ -17,10 +23,10 @@ public class ListCommand implements Command {
     }
 
     //TODO make to return String
-    private void ls(List<String> arguments, Pointer pointer) {
-        if (arguments != null) {
-            return;
+    private String ls(List<String> arguments, Pointer pointer) {
+        if (arguments.size() > 1) {
+            return "";
         }
-        pointer.getPointFolder().showContents();
+        return pointer.getPointFolder().showContents();
     }
 }

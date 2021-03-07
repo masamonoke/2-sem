@@ -87,47 +87,66 @@ public class FolderTerminal implements Unit{
         }
     }
 
-    public void drawTree() {
-        tree(-1);
+    public String drawTree() {
+        StringBuilder stringBuilder = new StringBuilder();
+        tree(-1, stringBuilder);
+        return stringBuilder.toString();
     }
-    private void tree(int indent) {
+    private void tree(int indent, StringBuilder stringBuilder) {
         if (indent == 0) {
-            System.out.print("├");
+            //System.out.print("├");
+            stringBuilder.append("├");
         } else if (indent > 0) {
-            System.out.print("│");
-            printSpace(indent);
-            System.out.print("├");
+            //System.out.print("│");
+            stringBuilder.append("│");
+            //printSpace(indent);
+            stringBuilder.append(printSpace(indent));
+            //System.out.print("├");
+            stringBuilder.append("├");
         }
-        System.out.print(ANSI_BLUE + this.name + ANSI_RESET);
-        System.out.println();
+        //System.out.print(ANSI_BLUE + this.name + ANSI_RESET);
+        stringBuilder.append(ANSI_BLUE).append(this.name).append(ANSI_RESET);
+        //System.out.println();
+        stringBuilder.append("\n");
         indent++;
         for (Unit unit : this.contents) {
             if (unit instanceof FolderTerminal) {
-                ((FolderTerminal) unit).tree(indent);
+                ((FolderTerminal) unit).tree(indent, stringBuilder);
             } else if (unit instanceof FileTerminal) {
-                System.out.print("│");
-                printSpace(indent);
-                System.out.println("├" + ANSI_RED + unit.getName() + ANSI_RESET);
+                //System.out.print("│");
+                stringBuilder.append("│");
+                //printSpace(indent);
+                stringBuilder.append(printSpace(indent));
+                //System.out.println("├" + ANSI_RED + unit.getName() + ANSI_RESET);
+                stringBuilder.append("├" + ANSI_RED).append(unit.getName()).append(ANSI_RESET);
             }
         }
     }
-    private void printSpace(int indent) {
+    private StringBuilder printSpace(int indent) {
+        StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < indent; i++) {
-            System.out.print(" ");
+            //System.out.print(" ");
+            stringBuilder.append(" ");
         }
+        return stringBuilder;
     }
 
-    public void showContents() {
+    public String showContents() {
+        StringBuilder stringBuilder = new StringBuilder();
         if (this.contents != null) {
             for (Unit unit : contents) {
                 if (unit instanceof FileTerminal) {
-                    System.out.print(ANSI_RED + unit.getName() + " " + ANSI_RESET);
+                    //System.out.print(ANSI_RED + unit.getName() + " " + ANSI_RESET);
+                    stringBuilder.append(ANSI_RED).append(unit.getName()).append(" ").append(ANSI_RESET);
                 } else if (unit instanceof  FolderTerminal) {
-                    System.out.print(ANSI_BLUE + unit.getName() + " " + ANSI_RESET);
+                    //System.out.print(ANSI_BLUE + unit.getName() + " " + ANSI_RESET);
+                    stringBuilder.append(ANSI_BLUE).append(unit.getName()).append(" ").append(ANSI_RESET);
                 }
             }
-            System.out.println();
+            //System.out.println();
+            return stringBuilder.toString();
         }
+        return "";
     }
 
     public String getPathForTerminalOutput() {

@@ -44,8 +44,9 @@ public class FileTerminal implements Unit{
         }
     }
 
-    public void outputData() {
-        System.out.println(data);
+    public String outputData() {
+        //System.out.println(data);
+        return data;
     }
 
     public static boolean isAType(String name) {

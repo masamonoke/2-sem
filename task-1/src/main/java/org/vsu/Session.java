@@ -1,14 +1,26 @@
 package org.vsu;
 
+import org.vsu.experimental.CommandFactory;
+import org.vsu.experimental.CommandInput;
+import org.vsu.experimental.Printable;
+import org.vsu.legasy.CommandsFactory;
+
+import java.util.Arrays;
 import java.util.Scanner;
 
 public final class Session {
-    private String user;
+    private final String USER;
+    private final String COMPUTER_NAME;
     private FolderTerminal rootFolder = new FolderTerminal();
     private Pointer pointer = new Pointer(rootFolder);
+    private final CommandFactory commandsFactory;
+    private CommandInput commandInput = new CommandInput();
 
-    public Session(String username) {
-        this.user = username;
+    public Session(String username, String computer_name, Printable printable) {
+        USER = username;
+        COMPUTER_NAME = computer_name;
+        commandInput.setFolder(rootFolder);
+        commandsFactory = new CommandFactory(printable);
     }
 
     public void shellProcess() {
@@ -17,13 +29,16 @@ public final class Session {
         while (true) {
             printShellCurrentPathAndUser();
             String input = scan.nextLine();
-            interpretInput(input);
+            commandInput.setPointer(pointer);
+            commandInput.setParams(Arrays.asList(input.split(" ")));
+            commandsFactory.execute(commandInput.getParams().get(0), commandInput);
+            //interpretInput(input);
         }
         //scan.close();
     }
 
     private void printShellCurrentPathAndUser() {
-        System.out.print(this.user + "@kek-computer:~" + pointer.getPointFolder().getPathForTerminalOutput() + "$ ");
+        System.out.print(USER + "@" + COMPUTER_NAME + ":~" + pointer.getPointFolder().getPathForTerminalOutput() + "$ ");
     }
 
     private void interpretInput(String input) {

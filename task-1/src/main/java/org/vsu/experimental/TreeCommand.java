@@ -3,9 +3,16 @@ package org.vsu.experimental;
 import org.vsu.Pointer;
 
 public class TreeCommand implements Command {
+
+    private Printable printable;
+
+    public TreeCommand(Printable printable) {
+        this.printable = printable;
+    }
+
     @Override
     public void execute(CommandInput input) {
-        tree(input.getPointer());
+        printable.print(tree(input.getPointer()));
     }
 
     @Override
@@ -14,7 +21,7 @@ public class TreeCommand implements Command {
     }
 
     //TODO make to return String
-    private void tree(Pointer pointer) {
-        pointer.getPointFolder().drawTree();
+    private String tree(Pointer pointer) {
+        return pointer.getPointFolder().drawTree();
     }
 }
